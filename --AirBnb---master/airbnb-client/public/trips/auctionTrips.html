@@ -1,0 +1,580 @@
+<style>
+	.billcolor{
+		background-color:gainsboro;
+	}
+	.billdialog{
+		width:800px;
+		border-top: 4px solid;
+		border-left: 2px gainsboro;
+
+
+	}
+	.billhead{
+		font-size: 18px;
+		color:black;
+	}
+	.billdown{
+		font-size:10px;
+		color:#e4a593;
+		padding-left: 15px;
+	}
+	.glyphiconsize{
+		font-size: 36px;
+		color:grey;
+		line-height: 70px;
+
+	}
+	.contentsize{
+		font-size:24px; padding-left: 0px;
+		line-height: 70px;
+	}
+	.receipt-amount{
+		margin-left:1050px;
+	}
+</style>
+<div class="header-include" ng-include="'host/header.html'"></div>
+<div style="padding-top:50px;">
+    <ul class="nav nav-tabs navbar-inverse" style="background-color: #484848;">
+        <li role="presentation"><a class="editProfile" ui-sref="userHome">Dashboard</a></li>
+        <li role="presentation"><a class="editProfile" ui-sref="yourListings">Your Listing</a></li>
+        <li role="presentation" class="active"><a ui-sref="yourTrips">Your Trips</a></li>
+        <li role="presentation"><a class="editProfile" ui-sref="editProfile">Profile</a></li>
+        <li role="presentation"><a class="editProfile" ui-sref="accountSettings">Account</a></li>
+    </ul>
+</div>
+
+
+
+<div class="page-container-responsive space-top-4 space-4">
+    <div class="row triphistoryrow">
+        <div class="col-md-3" style="padding-left: 80px;">
+
+            <ul class="sidenav-list">
+                <li style="list-style-type: none;">
+                    <a class="yourtrips"  style="text-decoration: none;color: #565a5c;line-height: 30px;" ui-sref="yourTrips">Upcoming Trips</a>
+                </li>
+                <li style="list-style-type: none;">
+                    <a class="yourtrips" style="text-decoration: none;color: #565a5c;line-height: 30px;"  ui-sref="previousTrips">Previous Trips</a>
+                </li>
+                <li style="list-style-type: none;">
+                    <a class="yourtrips" style="text-decoration: none;color: #565a5c;line-height: 30px;font-weight: bold;" ui-sref="auctionTrips">Auction Trips</a>
+                </li>
+            </ul>
+        </div>
+
+
+        <div class="col-md-9 tripsdiv">
+            <div class="panel row-space-4 custompanel">
+                <div class="prevtripshead">
+                    Previous Trips
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table panel-body panel-light" style="border-collapse: separate;">
+                        <tbody><tr>
+                            <th class="headcolor">Status</th>
+                            <th class="headcolor">Location</th>
+                            <th class="headcolor">Host</th>
+                            <th class="headcolor">Dates</th>
+                            <th class="headcolor">Payment Status</th>
+                            <th class="headcolor">Options</th>
+                        </tr>
+                        <tr ng-repeat="trip in auctionTrips">
+                            <td class="status"><span class="accpeted">{{trip.bidStatus | uppercase}}</span>
+                                <br>
+                            </td>
+                            <td class="location">
+                                <a href="">{{trip.streetAddress}}</a>
+                                <br>{{trip.listingCity}}-{{trip.zipCode}}
+                            </td>
+                            <td class="location" ><a style="color:red" href="" data-toggle="modal" data-target="#profileModal" ng-click="viewHostProfile(trip.hostEmail)" >{{trip.hostName}}</a></td>
+                            <td class="location">Check In: {{trip.checkInDate | date:'mediumDate'}}<br>Checkout: {{trip.checkOutDate | date:'mediumDate'}}</td>
+                            <td class="location">{{trip.paymentStatus | uppercase}}</td>
+
+                            <td>
+                                <ul class="unstyled button-list list-unstyled">
+                                    <li>
+                                   <button class="btn btn-primary airbnb-color" style="width:90px;margin-bottom:10px;" data-toggle="modal" ng-disabled="paymentButton[$index]" data-target="#myModal"  ng-click="pay(trip.tripId,trip.totalPrice)">Pay</button>
+                                   </li>
+
+                                    <li class="row-space-1">
+                               		<button class="btn btn-primary" style="width:90px;" ng-hide="billButton[$index]" data-toggle="modal" data-target="#billModal" ng-click="viewBill(trip.tripId)">View Bill</button>
+                                    </li>
+                                </ul>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+            <div class="alert alert-info" style="font-size: 20px; text-align: center;" ng-show="noTripsfound">
+                <strong >{{noTrips}}</strong>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    	<div class="modal-dialog" role="document">
+    		<div class="modal-content">
+    			<div class="modal-header" style="background-color:#E6E6E6;">
+    				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+    				<h4 class="modal-title" id="myModalLabel">Please fill the card details</h4>
+    			</div>
+    			<div class="modal-body">
+    				<div class="alert alert-danger" ng-show="errormsgpayment">
+    					<span >{{message}}</span>
+    				</div>
+    				<div class="editProfile" >
+    					<img class="editProfile" style="margin-left:15px;height:30px;width:30px;"src="./images/visa.jpg">
+    					<img class="editProfile" style="margin-left:15px;height:30px;width:30px;"src="./images/mastercard.jpg">
+    					<img class="editProfile" style="margin-left:15px;height:30px;width:30px;"src="./images/amex.png">
+    					<img class="editProfile" style="margin-left:15px;height:30px;width:30px;"src="./images/discover.png">
+
+    				</div>
+    				<div ng-show="paysuc" class="alert alert-success">
+    					{{paysuccess}}
+    					</div>
+    				<br>
+    				<div>
+    					<form class="form-horizontal" role="form">
+    						<div class="form-group">
+    							<label class="col-lg-3 control-label editProfile">Card Number</label>
+    							<div class="col-lg-9">
+    								<input class="form-control" type="text" required ng-model="cardDetails.cardNumber" maxlength="16">
+    							</div>
+    						</div>
+    						<div class="form-group">
+    							<label class="col-lg-3 control-label editProfile">Expiry</label>
+    							<div class="col-lg-2">
+    								<select class="form-control" ng-model="cardDetails.expiryMonth" required>
+    									<option value="1">1</option>
+    									<option value="2">2</option>
+    									<option value="3">3</option>
+    									<option value="4">4</option>
+    									<option value="5">5</option>
+    									<option value="6">6</option>
+    									<option value="7">7</option>
+    									<option value="8">8</option>
+    									<option value="9">9</option>
+    									<option value="10">10</option>
+    									<option value="11">11</option>
+    									<option value="12">12</option>
+    								</select>
+    							</div>
+    							<div class="col-lg-3">
+    								<select class="form-control" ng-model="cardDetails.expiryYear" required>
+    									<option value="2016">2016</option>
+    									<option value="2017">2017</option>
+    									<option value="2018">2018</option>
+    									<option value="2019">2019</option>
+    									<option value="2020">2020</option>
+    									<option value="2021">2021</option>
+    									<option value="2022">2022</option>
+    									<option value="2023">2023</option>
+    									<option value="2024">2024</option>
+    									<option value="2025">2025</option>
+    									<option value="2026">2026</option>
+    									<option value="2027">2027</option>
+    									<option value="2028">2028</option>
+    									<option value="2029">2029</option>
+    									<option value="2030">2030</option>
+    								</select>
+    							</div>
+    						</div>
+    						<div class="form-group">
+    							<label class="col-lg-3 control-label editProfile">Security Code</label>
+    							<div class="col-lg-2">
+    								<input class="form-control" type="password" ng-model="cardDetails.cvv" maxlength="3" required>
+    							</div>
+    							<label class="col-lg-3 control-label editProfile">Country</label>
+    							<div class="col-lg-4">
+    								<input class="form-control" type="text" ng-model="cardDetails.billingCountry">
+    							</div>
+    						</div>
+    						<div class="form-group">
+    							<label class="col-lg-3 control-label editProfile">First Name</label>
+    							<div class="col-lg-3">
+    								<input class="form-control" type="text" ng-model="cardDetails.billingFirstName" required>
+    							</div>
+    							<label class="col-lg-3 control-label editProfile">Last Name</label>
+    							<div class="col-lg-3">
+    								<input class="form-control" type="text" ng-model="cardDetails.billingLastName" required>
+    							</div>
+    						</div>
+    					</form>
+    				</div>
+    			</div>
+    			<div class="modal-footer">
+    				<div class="pull-left" style="color:darkred;font-size:20px; font-weight: 500;font-family: "Circular", "Helvetica Neue", Arial, sans-serif">
+    					Total: {{cardDetails.totalPrice | currency}}
+    				</div>
+    				<button type="button" class="btn btn-default" style="background-color:white" data-dismiss="modal">Cancel</button>
+    				<button type="button" class="btn btn-dafault airbnb-color" ng-disabled="disablepayment" ng-click="makePayment(cardDetails.cardNumber,cardDetails.expiryMonth,cardDetails.expiryYear,cardDetails.cvv,cardDetails.billingCountry,cardDetails.billingFirstName,cardDetails.billingLastName)">Make Payment</button>
+    			</div>
+    		</div>
+    	</div>
+    </div>
+
+
+<!--Bill HTMl-->
+
+<div style="background-color:#E6E6E6;">
+
+<div class="modal fade" id="billModal" tabindex="-1" role="dialog" aria-labelledby="billModal">
+	<div class="modal-dialog billdialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header billcolor" >
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+
+				<div class="row">
+					<div class="col-md-6">
+						<h2>Customer Receipt</h2>
+						<div class="h6 row-space-1">
+							Confirmation Code:
+							<span>{{tripId | limitTo:3}}</span>
+						</div>
+						<div>
+							Wed March 7, 2012 <br>
+							Receipt # {{tripId}}
+						</div>
+					</div>
+					<div class="col-md-6">
+					<span style="padding-left:200px; color:darkgrey">Airbnb</span><br>
+						<span style="padding-left:200px;color:darkgrey"">+1 (669) 263 7801</span><br>
+						<span class="pull-right" style="font-size:12px;color:darkgrey"">WWW.AIRBNB.COM/CONTACT</span>
+
+					</div>
+
+					<hr>
+				</div>
+
+
+
+			</div>
+
+			<div class="modal-body billcolor" >
+
+
+				<div class="row" style="border-bottom: 2px solid lightgrey;">
+					<div class="col-md-6" style="border-right: 3px solid lightgrey;">
+						<div class="row">
+							<div class="col-md-2">
+								<span class="glyphicon glyphicon-user glyphiconsize" ></span>
+							</div>
+							<div class="col-md-10">
+								<span class="contentsize">{{billUserName}}</span>
+							</div>
+							<span class="billdown">NAME</span>
+						</div>
+					</div>
+					<div class="col-md-6" style="border-right: 3px solid lightgrey;">
+						<div class="row">
+							<div class="col-md-2">
+								<span class="glyphicon glyphicon-map-marker glyphiconsize"></span>
+							</div>
+							<div class="col-md-10">
+								<span class="contentsize">{{listingCity}}</span>
+							</div>
+						</div>
+						<span class="billdown" style="padding-left: 0">TRAVEL DESTINATION</span>
+
+					</div>
+				</div>
+
+
+
+
+				<div class="row" style="border-bottom: 2px solid lightgrey;">
+					<div class="col-md-6" style="border-right: 3px solid lightgrey;">
+						<div class="row">
+							<div class="col-md-2">
+								<span class="glyphicon glyphicon-transfer glyphiconsize"></span>
+							</div>
+							<div class="col-md-10">
+								<span class="contentsize" style="font-size:20px;">{{streetAddress}}</span>
+							</div>
+							<span class="billdown">ACCOMODATION ADDRESS</span>
+						</div>
+					</div>
+					<div class="col-md-6" style="border-right: 3px solid lightgrey;">
+						<div class="row">
+							<div class="col-md-2">
+								<span class="glyphicon glyphicon-home glyphiconsize"></span>
+							</div>
+							<div class="col-md-10">
+								<span class="contentsize">{{listingTitle}}</span>
+							</div>
+						</div>
+						<span class="billdown" style="padding-left: 0">PROPERTY</span>
+
+					</div>
+				</div>
+
+
+
+
+
+				<div class="row" style="border-bottom: 2px solid lightgrey;">
+						<div class="col-md-6" style="border-right: 3px solid lightgrey;">
+							<div class="row">
+								<div class="col-md-2">
+									<span class="glyphicon glyphicon-object-align-bottom glyphiconsize"></span>
+								</div>
+								<div class="col-md-10">
+									<span class="contentsize" style="font-size:20px;">{{hostEmail}}</span>
+								</div>
+								<span class="billdown">HOST</span>
+							</div>
+						</div>
+						<div class="col-md-6" style="border-right: 3px solid lightgrey;">
+							<div class="row">
+								<div class="col-md-2">
+									<span class="glyphicon glyphicon-user" style="font-size:20px;margin-top:25px;color:grey;"></span>
+									<span class="glyphicon glyphicon-user" style="font-size: 30px; margin-top: -25px; padding-left:10px;color:grey;"></span>
+								</div>
+								<div class="col-md-10">
+									<span class="contentsize">{{guestsSelected}}</span>
+								</div>
+							</div>
+							<span class="billdown" style="padding-left: 0">GUESTS</span>
+
+						</div>
+					</div>
+
+
+
+
+
+
+					<div class="row" style="border-bottom: 2px solid lightgrey;">
+						<div class="col-md-6" style="border-right: 3px solid lightgrey;">
+							<div class="row">
+								<div class="col-md-2">
+									<span class="glyphicon glyphicon-calendar glyphiconsize"></span>
+								</div>
+								<div class="col-md-10">
+									<span class="contentsize" style="font-size:20px;">{{checkInDate}} 01:00PM</span>
+								</div>
+								<span class="billdown">CHECKIN</span>
+							</div>
+						</div>
+						<div class="col-md-6" style="border-right: 3px solid lightgrey;">
+							<div class="row">
+								<div class="col-md-2">
+									<span class="glyphicon glyphicon-calendar glyphiconsize"></span>
+								</div>
+								<div class="col-md-10">
+									<span class="contentsize" style="font-size:20px;">{{checkOutDate}} 12:00PM</span>
+								</div>
+							</div>
+							<span class="billdown" style="padding-left: 0">CHECKOUT</span>
+
+						</div>
+					</div>
+
+				<div class="row" style="border-bottom: 2px solid lightgrey;">
+					<div class="col-md-6" style="border-right: 3px solid lightgrey;">
+						<div class="row">
+							<div class="col-md-2">
+							<span class="glyphicon glyphicon-bed glyphiconsize"></span>
+							</div>
+							<div class="col-md-10">
+								<span class="contentsize">{{diffDays2}}</span>
+							</div>
+							<span class="billdown">NIGHTS</span>
+					</div>
+					</div>
+					<div class="col-md-6" style="border-right: 3px solid lightgrey;">
+						<div class="row">
+								<div class="col-md-2">
+									<span class="glyphicon glyphicon-credit-card glyphiconsize"></span>
+								</div>
+								<div class="col-md-10">
+									<span class="contentsize">$0</span>
+								</div>
+						</div>
+						<span class="billdown" style="padding-left: 0">SECURITY DEPOSIT</span>
+
+					</div>
+				</div>
+
+
+
+
+				<div class="panel-body">
+					<div class="row row-space-condensed row-space-top-4">
+						<div class="col-12">
+							<h2>
+								Payment Details
+							</h2>
+
+							<table class="table table-bordered payment-table">
+								<tbody>
+								<tr>
+									<th class="receipt-label">Accomodations</th>
+									<td class="receipt-amount">
+										{{auctionPrice *diffDays2 | currency }}({{auctionPrice | currency}} per night)
+									</td>
+								</tr>
+								<tr>
+									<th class="receipt-label">
+										Service Fee
+									</th>
+									<td class="receipt-amount">$0</td>
+								</tr>
+								</tbody>
+								<tfoot>
+								<tr>
+									<th class="receipt-label">Total</th>
+									<td class="receipt-amount">{{auctionPrice *diffDays2 | currency }}</td>
+								</tr>
+								</tfoot>
+							</table>
+							<hr>
+
+							<table class="table table-bordered payment-table">
+								<tbody>
+								<tr>
+									<th class="receipt-label">
+										Payment Received:
+										Sun, May 01, 2016<br>
+										Card : XXXXXXXXXXXX{{cardNumber}}
+
+									</th>
+									<td class="contentsize">
+										{{auctionPrice *diffDays2 | currency }}
+									</td>
+								</tr>
+								</tbody>
+							</table>
+
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer billcolor">
+				<img style="width:200px; height:30px; margin-right:275px;" src="images/barcode.jpg">
+				<div style=" margin-right:291px;">
+					<span>Thanks for travelling with us</span>
+					</div>
+
+			</div>
+		</div>
+	</div>
+</div>
+
+	<!-- View Profile HTMl-->
+
+	<div class="modal fade" id="profileModal" tabindex="-1" role="dialog" aria-labelledby="profileModal">
+		<div class="modal-dialog modal-lg" role="document">
+			<div class="modal-content">
+				<div class="modal-header" >
+
+
+	<div class="row">
+
+		<div class="col-sm-12 col-md-12">
+
+
+
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h3 class="panel-title">User Profile</h3>
+				</div>
+				<div class="panel-body">
+
+					<div class="row">
+
+						<div class="user-dashboard-pic text-center col-md-2 col-lg-2" style="height: 200px;">
+
+							<div class="img-user-dashboard "><a><img ng-src="{{hostProfilePic}}" alt=""></a></div>
+							<h3>{{fname}}</h3>
+
+						</div>
+
+
+						<div class=" col-md-8">
+							<div class="host-dashboard-header">
+								<div class=""> <p>User Details</p> </div>
+							</div>
+							<div class="col-md-6 col-lg-6  col-xs-6" >
+								<form class="form-horizontal" role="form">
+									<div class="form-group">
+										<label class="col-lg-6 control-label">First Name: </label>{{fname}}
+									</div>
+									<div class="form-group">
+										<label class="col-lg-6 control-label editProfile">Last Name:</label>{{lname}}
+									</div>
+
+									<div class="form-group">
+										<label class="col-lg-6 control-label editProfile">Gender: </label>{{gender}}
+									</div>
+									<div class="form-group">
+										<label class="col-lg-6 control-label editProfile">Birth Date: </label>{{dob | date:'yyyy-MM-dd '}}
+
+									</div>
+									<div class="form-group">
+										<label class="col-lg-6 control-label editProfile">Email Address: </label>{{email}}
+									</div>
+									<div class="form-group">
+										<label class="col-lg-6 control-label editProfile">Phone Number: </label>{{pNumber}}
+									</div>
+									<div class="form-group">
+										<label class="col-lg-6 control-label editProfile">Preferred Language: </label>{{language}}
+									</div>
+									<div class="form-group">
+										<label class="col-lg-6 control-label editProfile">Preferred Currency: </label>{{currency}}
+									</div>
+									<div class="form-group">
+										<label class="col-lg-6 control-label editProfile">Street Address: </label>{{stAddress}}
+									</div>
+									<div class="form-group">
+										<label class="col-lg-6 control-label editProfile">City: </label>{{city}}
+									</div>
+									<div class="form-group">
+										<label class="col-lg-6 control-label editProfile">State: </label>{{state}}
+									</div>
+
+									<div class="form-group">
+										<label class="col-lg-6 control-label editProfile">Country: </label>{{country}}
+									</div>
+									<div class="form-group">
+										<label class="col-lg-6 control-label editProfile">Zip Code: </label>{{zipCode}}
+									</div>
+									<div class="form-group">
+										<label class="col-lg-6 control-label editProfile">Describe Yourself: </label>{{aboutme}}
+
+									</div>
+								</form>
+							</div>
+
+						</div>
+					</div>
+
+
+
+
+				</div>
+			</div>
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h3 class="panel-title">Business Travel</h3>
+				</div>
+				<div class="panel-body">
+					<form class="form-horizontal" role="form">
+						<div class="form-group">
+							<label class="col-lg-3 control-label editProfile">Work Email Address: </label>{{workEmail}}
+
+						</div>
+					</form>
+				</div>
+			</div>
+
+		</div>
+	</div>
+
+

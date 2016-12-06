@@ -1,0 +1,35 @@
+<ion-view hide-nav-bar="true" class="bg-color" >
+  <ion-content>
+
+
+    <div class="col">
+      <div   class=" space-up center header-font">Log In</div>
+    </div>
+    <div class="col ">
+      <div class="signup">
+
+        <span ng-show="authError">{{authErrorMessage}}</span>
+        <form name="signupform" novalidate >
+
+          <input required name="email" placeholder="Email" ng-model="user.email" type="email">
+          <span  class="form-error" ng-show=" signupform.email.$touched && signupform.email.$invalid"> Please Enter a valid email</span>
+
+
+          <input required ng-minlength="7" name="password" placeholder="Password" ng-model="user.password" type="password">
+          <span class="form-error"  ng-show="signupfrom.password.$invalid"> Password should be of atleast 7 chars</span>
+
+
+          <button  ng-disabled="signupform.$invalid" class="space-up center button-login"  ng-click="next(user)">Login</button>
+        </form>
+      </div>
+    </div>
+
+    <!--<div class="bottom-right-nav col" >-->
+    <!--<button ion-button color="secondary" outline>Secondary Outline</button>-->
+    <!--<i ng-click="next()" class="icon ion-chevron-right icon-right"></i>-->
+    <!--</div>-->
+
+
+    <ui-view></ui-view>
+  </ion-content>
+</ion-view>
