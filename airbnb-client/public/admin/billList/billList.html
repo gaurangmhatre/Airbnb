@@ -1,0 +1,655 @@
+<style>
+    .billcolor{
+        background-color:gainsboro;
+    }
+    .billdialog{
+        width:800px;
+        border-top: 4px solid;
+        border-left: 2px gainsboro;
+
+
+    }
+    li{
+        cursor: pointer;
+    }
+    .billhead{
+        font-size: 18px;
+        color:black;
+    }
+    .billdown{
+        font-size:10px;
+        color:#e4a593;
+        padding-left: 15px;
+    }
+    .glyphiconsize{
+        font-size: 36px;
+        color:grey;
+        line-height: 70px;
+
+    }
+    .contentsize{
+        font-size:24px; padding-left: 0px;
+        line-height: 70px;
+    }
+    .receipt-amount{
+        margin-left:1050px;
+    }
+</style>
+
+
+<div class="header-include" ng-include="'admin/landingPage/header.html'"></div>
+</br>
+</br>
+</br>
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
+
+<div class="col-md-2 sidebar">
+    <div class="row">
+        <!-- Menu -->
+        <div class="side-menu">
+            <div class="side-menu-container">
+                <nav class="navbar navbar-default" role="navigation">
+                    <!-- Main Menu -->
+                    <ul class="nav navbar-nav">
+                        <li ><a ui-sref="adminGraphDashboard"><span class="glyphicon glyphicon-dashboard"></span> Dashboard</a></li><!--class="active"-->
+
+                        <!-- Dropdown-->
+                        <li id="dropdown">
+                            <a data-toggle="collapse" data-target="#dropdown-lvl1">
+                                <span class="glyphicon glyphicon-plane"></span> Listings <span class="caret"></span>
+                            </a>
+
+                            <!-- Dropdown level 1 -->
+                            <div id="dropdown-lvl1" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <ul class="nav navbar-nav">
+                                        <li><a ui-sref="pendingListings">Pending</a></li>
+                                        <li><a ui-sref="approvedListings">Approved</a></li>
+                                        <li><a ui-sref="rejectedListings">Rejected</a></li>
+
+
+                                    </ul>
+                                </div>
+                            </div>
+                        </li>
+
+                        <!-- Dropdown-->
+                        <li id="dropdown">
+                            <a data-toggle="collapse" data-target="#dropdown-lvl2">
+                                <span class="glyphicon glyphicon-user"></span> review <span class="caret"></span>
+                            </a>
+                            <!-- Dropdown level 1 -->
+                            <div id="dropdown-lvl2" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <ul class="nav navbar-nav">
+                                        <li><a ui-sref="userList">Users</a></li>
+                                        <li><a ui-sref="hostList">Host</a></li>
+                                        <li><a ui-sref="billList">Bills</a></li>
+
+                                        <!-- Dropdown level 2 -->
+                                        <!-- <li class="panel panel-default" id="dropdown">
+                                             <a data-toggle="collapse" href="#dropdown-lvl2">
+                                                 <span class="glyphicon glyphicon-off"></span> Sub Level <span class="caret"></span>
+                                             </a>
+                                             <div id="dropdown-lvl2" class="panel-collapse collapse">
+                                                 <div class="panel-body">
+                                                     <ul class="nav navbar-nav">
+                                                         <li><a href="#">Link</a></li>
+                                                         <li><a href="#">Link</a></li>
+                                                         <li><a href="#">Link</a></li>
+                                                     </ul>
+                                                 </div>
+                                             </div>
+                                         </li>-->
+                                    </ul>
+                                </div>
+                            </div>
+                        </li>
+
+                    </ul>
+                    <!-- /.navbar-collapse -->
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="col-md-10 content">
+    <div class="row">
+        <div class="panel-heading" style = "color:white;background-color: #FF5A5F">
+            Review hosts
+        </div>
+        <div class="panel-body">
+            <div class="container">
+
+                <div class="container">
+                    <div class="row">
+
+
+                        <div class="col-md-12">
+
+                            <div class=".upload-error" ng-show="errorMsgDisplay" style="color:red">{{errorMsg}}</div>
+                            <h4 >Enter Bill date</h4>
+                            <div class="row ">
+                                <!--<input class="btn btn-sm" name="dateSelectedForSearch" id="dateSelectedForSearch" ng-model="dateSelectedForSearch" placeholder="Enter Bill date">-->
+                                <div class="col-xs-4 col-md-4">
+                                    <input class="form-control input-lg" type="date" ng-model="dateSelectedForSearch">
+
+                                </div>
+
+                                <button class="btn btn-success input-lg" ng-click="search()" >Search by date</button>
+                            </div>
+                            <h4>Search by Month and Year</h4>
+                            <div class="row">
+                                <div class="col-xs-4 col-md-4">
+                                    <select name="month" class="form-control input-lg"  ng-model="SelectedMonth">
+                                        <option value="01" >Jan</option>
+                                        <option value="02"  >Feb</option>
+                                        <option value="03"  >Mar</option>
+                                        <option value="04"  >Apr</option>
+                                        <option value="05"  >May</option>
+                                        <option value="06"  >Jun</option>
+                                        <option value="07"  >Jul</option>
+                                        <option value="08"  >Aug</option>
+                                        <option value="09"  >Sep</option>
+                                        <option value="10"  >Oct</option>
+                                        <option value="11"  >Nov</option>
+                                        <option value="12" >Dec</option>
+                                    </select>
+                                </div>
+
+                                <div class="col-xs-4 col-md-4">
+                                    <select name="year" class="form-control input-lg" ng-model="SelectedYear">
+                                        <option value="2011" >2011</option>
+                                        <option value="2012" >2012</option>
+                                        <option value="2013" >2013</option>
+                                        <option value="2014" >2014</option>
+                                        <option value="2015" >2015</option>
+                                        <option value="2016" >2016</option>
+
+
+                                    </select>
+                                </div>
+
+                                <button class="btn btn-success input-lg" ng-click="searchByMonth()" >Search by month </button>
+                            </div>
+
+                            </br>
+                            <button class="btn btn-danger input-lg" ng-click="reset()" >Reset grid</button>
+                            </br>
+                            <div class="table-responsive">
+
+
+                                <table id="mytable" class="table table-bordred table-striped">
+
+                                    <thead>
+
+                                    <th><input type="checkbox" id="checkall" /></th>
+                                    <th>Bill Id</th>
+                                    <th>Bill Date</th>
+                                    <!-- <th>Address</th>-->
+                                    <th>Host Name</th>
+                                    <th>Listing City</th>
+                                    <th>Payment Status</th>
+                                    <th>Trip Status</th>
+                                    <th>User Email</th>
+                                    <th>check In Date</th>
+                                    <th>check Out Date</th>
+                                    <th>View Bill</th>
+                                    </thead>
+                                    <tbody>
+
+                                    <tr ng-repeat="bill in AllBillList">
+                                        <td><input type="checkbox" class="checkthis" /></td>
+                                        <td width="10%">{{bill.billId}}</td>
+                                        <td>{{bill.billDate | date:'short'}}</td>
+                                        <td>{{bill.hostName}}</td>
+                                        <td>{{bill.listingCity}}</td>
+                                        <td>{{bill.paymentStatus}}</td>
+                                        <td>{{bill.tripStatus}}</td>
+                                        <td>{{bill.userEmail}}</td>
+                                        <td>{{bill.checkInDate| date:'short'}}</td>
+                                        <td>{{bill.checkOutDate| date:'short'}}</td>
+                                        <td><p data-placement="top" title="Edit"><button class="btn-success btn-xs" ng-click="getBillDetails(bill)" data-toggle="modal" data-target="#BillProfile">View</button></p></td>
+
+                                    </tr>
+
+                                    </tbody>
+
+                                </table>
+
+
+
+                            </div>
+							<!--  <div>
+								<ul class="pagination" ng-repeat="tabCount in tabCounts">
+								  <li><a role="button" ng-click="changePage(tabCount.count)">{{tabCount.count}}</a></li>
+								</ul>
+							</div> -->
+							<div class="pull-left" ng-show="previousBtn">
+								<button class="btn btn-default" ng-click="clickPrevious()">Previous</button>
+							</div>
+							<div class="pull-right" ng-show="nextButton">
+								<button class="btn btn-default" ng-click="clickNext()">Next</button>
+							</div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+
+<div class="modal fade" id="BillProfile" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <!--<div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
+                <h4 class="modal-title custom_align" id="Heading">Bill Details</h4>
+            </div>-->
+            <div>
+                <!--<div class="form-group">
+                    <input class="form-control " type="text" placeholder="Mohsin">
+                </div>
+                <div class="form-group">
+
+                    <input class="form-control " type="text" placeholder="Irshad">
+                </div>
+                <div class="form-group">
+                    <textarea rows="2" class="form-control" placeholder="CB 106/107 Street # 11 Wah Cantt Islamabad Pakistan"></textarea>
+                </div>-->
+
+
+
+                <div class="row">
+                    <!--<div class="well col-xs-10 col-sm-10 col-md-6 col-xs-offset-1 col-sm-offset-1 col-md-offset-3">
+                        <div class="row">
+                            <div class="col-xs-6 col-sm-6 col-md-6">
+                                <address>
+                                    <H2>Bill Receipt</H2>
+                                    <br>
+                                    Confirmation code: {{SelectedBillId }}
+                                    <br>
+                                    <p id="demo"></p>
+                                    <br>
+
+                                </address>
+                            </div>
+                            <div class="col-xs-6 col-sm-6 col-md-6 text-right">
+                                <p>
+                                    <em>AirBnB:</em>
+                                    <em>+1 (408)831-8859</em>
+                                </p>
+                                <p>
+                                    <em>www.aribnb.com/contact</em>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <table class="table table-hover" style="align-content: flex-start">
+                                <col width="20">
+                                <col width="500">
+                                <col width="20">
+                                <col width="500">
+
+                                <tr>
+                                    <th class="text-left"></th>
+                                    <th class="text-left"></th>
+                                    <th class="text-left"></th>
+                                    <th class="text-left"></th>
+                                    <th></th>
+                                    <th></th>
+                                </tr>
+                                <tr>
+                                    <td><i class="glyphicon glyphicon-user"></i></td>
+                                    <td style="text-align: left">{{SelecteduserName}}</td>
+                                    <td style="text-align: left"><span class="glyphicon glyphicon-map-marker"></span></td>
+                                    <td style="text-align: left">{{SelectedlistingTitle}}</td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td ><i class="material-icons"></i></td>
+                                    <td style="text-align: left">{{SelectedlistingCity}}</td>
+                                    <td style="text-align: left"><span class="glyphicon glyphicon-home"></span></td>
+                                    <td style="text-align: left">{{SelectedstreetAddress}}</td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td ><i class="material-icons"></i></td>
+                                    <td  style="text-align: left">{{SelectedsuiteNum}}</td>
+                                    <td  style="text-align: left">&lt;!&ndash;<i class="material-icons">group</i>&ndash;&gt;</td>
+                                    <td  style="text-align: left">{{SelectedpaymentStatus}}</td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td ><span class="glyphicon glyphicon-calendar"></span></td>
+                                    <td style="text-align: left">{{SelectedcheckInDate| date:'short'}}</td>
+                                    <td style="text-align: left"><span class="glyphicon glyphicon-calendar"></span></td>
+                                    <td style="text-align: left">{{SelectedcheckOutDate| date:'short'}}</td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td ><i class="glyphicon glyphicon-lamp"></i></td>
+                                    <td style="text-align: left">{{SelectedguestsSelected}} Guests</td>
+                                    <td style="text-align: left"><i class="glyphicon glyphicon-usd"></i></td>
+                                    <td style="text-align: left">{{SelectedfixedPrice}}</td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                            </table>
+
+                            <div class="col-xs-6 col-sm-6 col-md-6">
+                                <address>
+                                    <strong>Payment Details</strong>
+                                    <br>
+                                </address>
+                            </div>
+                            <table class="table table-hover">
+                                <thead>
+                                <tr>
+                                    <th>Product</th>
+                                    <th> </th>
+                                    <th class="text-center"></th>
+                                    <th class="text-center"></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td class="col-md-9"><h4><em>Accomodations</em></h4></td>
+                                    <td class="col-md-1" style="text-align: center">  </td>
+                                    <td class="col-md-1 text-center"></td>
+                                    <td class="col-md-1 text-center">{{SelectedtotalPrice}}</td>
+                                </tr>
+                                <tr>
+                                    <td class="col-md-9"><h4><em>Airbnb service fee</em></h4></td>
+                                    <td class="col-md-1" style="text-align: center">  </td>
+                                    <td class="col-md-1 text-center"></td>
+                                    <td class="col-md-1 text-center">Free</td>
+                                </tr>
+                                <tr>
+                                    <td class="col-md-9"><h4><em>Airbnb concierge</em></h4></td>
+                                    <td class="col-md-1" style="text-align: center">  </td>
+                                    <td class="col-md-1 text-center"></td>
+                                    <td class="col-md-1 text-center">Free</td>
+                                </tr>
+                                <tr>
+                                    <td class="col-md-9"><h4><em></em></h4></td>
+                                    <td class="col-md-1" style="text-align: center">  </td>
+                                    <td class="col-md-1 text-center">TOTAL</td>
+                                    <td class="col-md-1 text-center">{{SelectedtotalPrice}}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+
+                        </div>
+                    </div>-->
+
+
+                    <div class="modal-content">
+                        <div class="modal-header billcolor" >
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h2>Customer Receipt</h2>
+                                    <div class="h6 row-space-1">
+                                        Confirmation Code:
+                                        <span>{{tripId | limitTo:3}}</span>
+                                    </div>
+                                    <div>
+                                        Wed March 7, 2012 <br>
+                                        Receipt # {{tripId}}
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <span style="padding-left:200px; color:darkgrey">Airbnb</span><br>
+                                    <span style="padding-left:200px;color:darkgrey">+1 (669) 263 7801</span><br>
+                                    <span class="pull-right" style="padding-right: 60px; font-size:12px;color:darkgrey">WWW.AIRBNB.COM/CONTACT</span>
+
+                                </div>
+
+                                <hr>
+                            </div>
+
+
+
+                        </div>
+
+                        <div class="modal-body billcolor" >
+
+
+                            <div class="row" style="border-bottom: 2px solid lightgrey;">
+                                <div class="col-md-6" style="border-right: 3px solid lightgrey;">
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <span class="glyphicon glyphicon-user glyphiconsize" ></span>
+                                        </div>
+                                        <div class="col-md-10">
+                                            <span class="contentsize">{{billUserName}}</span>
+                                        </div>
+                                        <span class="billdown">NAME</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6" style="border-right: 3px solid lightgrey;">
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <span class="glyphicon glyphicon-map-marker glyphiconsize"></span>
+                                        </div>
+                                        <div class="col-md-10">
+                                            <span class="contentsize">{{listingCity}}</span>
+                                        </div>
+                                    </div>
+                                    <span class="billdown" style="padding-left: 0">TRAVEL DESTINATION</span>
+
+                                </div>
+                            </div>
+
+
+
+
+                            <div class="row" style="border-bottom: 2px solid lightgrey;">
+                                <div class="col-md-6" style="border-right: 3px solid lightgrey;">
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <span class="glyphicon glyphicon-transfer glyphiconsize"></span>
+                                        </div>
+                                        <div class="col-md-10">
+                                            <span class="contentsize" style="font-size:20px;">{{streetAddress}}</span>
+                                        </div>
+                                        <span class="billdown">ACCOMODATION ADDRESS</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6" style="border-right: 3px solid lightgrey;">
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <span class="glyphicon glyphicon-home glyphiconsize"></span>
+                                        </div>
+                                        <div class="col-md-10">
+                                            <span class="contentsize">{{listingTitle}}</span>
+                                        </div>
+                                    </div>
+                                    <span class="billdown" style="padding-left: 0">PROPERTY</span>
+
+                                </div>
+                            </div>
+
+
+
+
+
+                            <div class="row" style="border-bottom: 2px solid lightgrey;">
+                                <div class="col-md-6" style="border-right: 3px solid lightgrey;">
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <span class="glyphicon glyphicon-object-align-bottom glyphiconsize"></span>
+                                        </div>
+                                        <div class="col-md-10">
+                                            <span class="contentsize" style="font-size:20px;">{{hostEmail}}</span>
+                                        </div>
+                                        <span class="billdown">HOST</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6" style="border-right: 3px solid lightgrey;">
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <span class="glyphicon glyphicon-user" style="font-size:20px;margin-top:25px;color:grey;"></span>
+                                            <span class="glyphicon glyphicon-user" style="font-size: 30px; margin-top: -25px; padding-left:10px;color:grey;"></span>
+                                        </div>
+                                        <div class="col-md-10">
+                                            <span class="contentsize">{{guestsSelected}}</span>
+                                        </div>
+                                    </div>
+                                    <span class="billdown" style="padding-left: 0">GUESTS</span>
+
+                                </div>
+                            </div>
+
+
+
+
+
+
+                            <div class="row" style="border-bottom: 2px solid lightgrey;">
+                                <div class="col-md-6" style="border-right: 3px solid lightgrey;">
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <span class="glyphicon glyphicon-calendar glyphiconsize"></span>
+                                        </div>
+                                        <div class="col-md-10">
+                                            <span class="contentsize" style="font-size:20px;">{{checkInDate}} 01:00PM</span>
+                                        </div>
+                                        <span class="billdown">CHECKIN</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6" style="border-right: 3px solid lightgrey;">
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <span class="glyphicon glyphicon-calendar glyphiconsize"></span>
+                                        </div>
+                                        <div class="col-md-10">
+                                            <span class="contentsize" style="font-size:20px;">{{checkOutDate}} 12:00PM</span>
+                                        </div>
+                                    </div>
+                                    <span class="billdown" style="padding-left: 0">CHECKOUT</span>
+
+                                </div>
+                            </div>
+
+                            <div class="row" style="border-bottom: 2px solid lightgrey;">
+                                <div class="col-md-6" style="border-right: 3px solid lightgrey;">
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <span class="glyphicon glyphicon-bed glyphiconsize"></span>
+                                        </div>
+                                        <div class="col-md-10">
+                                            <span class="contentsize">{{diffDays1}}</span>
+                                        </div>
+                                        <span class="billdown">NIGHTS</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6" style="border-right: 3px solid lightgrey;">
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <span class="glyphicon glyphicon-credit-card glyphiconsize"></span>
+                                        </div>
+                                        <div class="col-md-10">
+                                            <span class="contentsize">$0</span>
+                                        </div>
+                                    </div>
+                                    <span class="billdown" style="padding-left: 0">SECURITY DEPOSIT</span>
+
+                                </div>
+                            </div>
+
+
+
+
+                            <div class="panel-body">
+                                <div class="row row-space-condensed row-space-top-4">
+                                    <div class="col-12">
+                                        <h2>
+                                            Payment Details
+                                        </h2>
+
+                                        <table class="table table-bordered payment-table">
+                                            <tbody>
+                                            <tr>
+                                                <th class="receipt-label">Accomodations</th>
+                                                <td class="receipt-amount">
+                                                    {{fixedPrice *diffDays1 | currency }}({{fixedPrice | currency}} per night)
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th class="receipt-label">
+                                                    Service Fee
+                                                </th>
+                                                <td class="receipt-amount">$0</td>
+                                            </tr>
+                                            </tbody>
+                                            <tfoot>
+                                            <tr>
+                                                <th class="receipt-label">Total</th>
+                                                <td class="receipt-amount">{{fixedPrice *diffDays1 | currency }}</td>
+                                            </tr>
+                                            </tfoot>
+                                        </table>
+                                        <hr>
+
+                                        <table class="table table-bordered payment-table">
+                                            <tbody>
+                                            <tr>
+                                                <th class="receipt-label">
+                                                    Payment Received:
+                                                    Sun, May 01, 2016<br>
+                                                    Card : XXXXXXXXXXXX{{cardNumber}}
+
+                                                </th>
+                                                <td class="contentsize">
+                                                    {{fixedPrice *diffDays1 | currency }}
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer billcolor">
+                          <img style="width:200px; height:30px; margin-right: 335px;" src="../images/barcode.jpg">
+                            <div style=" margin-right:351px;">
+                                <span>Thanks for travelling with us</span>
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                </div>
+
+
+
+
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+</div>
+

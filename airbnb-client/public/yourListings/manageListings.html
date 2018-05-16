@@ -1,0 +1,111 @@
+<div class="header-include" ng-include="'host/header.html'"></div>
+<div style="padding-top:50px;">
+	<ul class="nav nav-tabs navbar-inverse" style="background-color: #484848;">
+	  <li role="presentation"><a class="editProfile" ui-sref="userHome">Dashboard</a></li>
+	  <li role="presentation" class="active"><a ui-sref="yourListings">Your Listing</a></li>
+	  <li role="presentation"><a class="editProfile" ui-sref="yourTrips">Your Trips</a></li>
+	  <li role="presentation"><a class="editProfile" ui-sref="editProfile">Profile</a></li>
+	  <li role="presentation"><a class="editProfile" ui-sref="accountSettings">Account</a></li>
+	</ul>
+</div>
+<br>
+<br>
+<!--<h1>{{message}}</h1>-->
+<div class ="container listing-steps-option ">
+
+<div class="col-lg-2 col-md-2">
+	<div class="listing-container">
+
+		<div><a class="editProfile" ui-sref="yourListings"><h4>Your Listings</h4></a></div>
+		<div><a class="editProfile" ui-sref="yourReservations"><h4>Your Reservations</h4></a></div>
+		<div><a ui-sref="manageListings"><h4>Manage Listing</h4></a></div>
+	</div>
+</div>
+
+<div class="col-lg-10 col-md-10 editProfile">
+	<div class="listed-all">
+		<div class="listed-header">
+			<h3>Listed</h3>
+		</div>
+		<div class="list-card" ng-repeat="list in listings">
+			<div class=" list-img-hld col-md-2 col-lg-2">
+				<img ng-src="{{list.images}}" alt="">
+			</div>
+			<div class=" list-title col-md-6 col-lg-6">
+				<h4>{{list.name}}</h4>
+			</div>
+			<div class=" list-options col-md-3 col-lg-3">
+				<div class="col-lg-3">
+					<button type="button" class="btn btn-dafault airbnb-color" ng-click = "removeListing(list.listId)"><strong>Remove</strong></button>
+				</div>
+				<br><br>
+				<div class="col-lg-3">
+					<button type="button" class="btn btn-dafault airbnb-color" data-toggle="modal" data-target="#myModal" ng-click = "getList(list.id)"><strong>Change</strong></button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+	  <div class="modal-dialog" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header" style="background-color:#E6E6E6;">
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+	        <h4 class="modal-title" id="myModalLabel">Edit Listing</h4>
+	      </div>
+	      <div class="modal-body">
+			  <div class="alert alert-danger" ng-show="errormsgpayment">
+				  <span >{{message}}</span>
+			  </div>
+	        <br>
+			<div>
+				<form class="form-horizontal" role="form">
+					<div class="form-group">
+	            		<label class="col-lg-4 control-label editProfile">Title</label>
+		            	<div class="col-lg-6">
+		              		<input class="form-control" onkeypress='return event.charCode >= 48 && event.charCode <=57' type="text" ng-model="title">
+		              	</div>
+		            </div>
+		            <div class="form-group">
+	            		<label class="col-lg-4 control-label editProfile">From</label>
+		            	<div class="col-lg-4">
+		              		<input class="form-control" type="date" ng-model="fromDate">
+		              	</div>
+		            </div>
+		            <div class="form-group">
+		            	<label class="col-lg-4 control-label editProfile">To</label>
+		              	<div class="col-lg-4">
+		              		<input class="form-control" type="date" ng-model="toDate">
+		              	</div>
+		            </div>
+		            <div class="form-group">
+	            		<label class="col-lg-4 control-label editProfile">Fixed Price</label>
+		            	<div class="col-lg-4">
+		              		<input class="form-control" onkeypress='return event.charCode >= 48 && event.charCode <=57' type="text" ng-model="fixedPrice">
+		              	</div>
+		            </div>
+		            <div class="form-group">
+		            	<label class="col-lg-4 control-label editProfile">Auction Price</label>
+		            	<div class="col-lg-4">
+		              		<input class="form-control" onkeypress='return event.charCode >= 48 && event.charCode <=57' type="text" ng-model="auctionPrice">
+		              	</div>
+		            </div>
+		            <div class="form-group">
+	            		<label class="col-lg-4 control-label editProfile">Number of Guests</label>
+		            	<div class="col-lg-4">
+		              		<input class="form-control" type="text" ng-model="noOfGuests">
+		              	</div>
+		            </div>
+				</form>
+			</div>
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-default" style="background-color:white" data-dismiss="modal">Cancel</button>
+	        <button type="button" class="btn btn-dafault airbnb-color" ng-click="editList(title,fromDate,toDate,fixedPrice,auctionPrice,noOfGuests)">Save</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+
+</div>

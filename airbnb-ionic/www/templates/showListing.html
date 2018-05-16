@@ -1,0 +1,232 @@
+<ion-view>
+  <ion-content overflow-scroll="true">
+    <br>
+    <br>
+    <br>
+
+    <div class="col" style="margin-bottom: 80px; ">
+      <div class="class-12">
+
+
+        <div class="row">
+          <div class="col-33 ">Check In date</div>
+          <div class="col-33 ">Check Out date</div>
+          <div class="col-33 ">Guest</div>
+        </div>
+
+        <div class="row">
+          <div class="col-33">
+            <div >
+              <input type="date" class="checkindateallprop" ng-model="selectedCheckIn">
+            </div>
+
+          </div>
+
+          <div class="col-33">
+            <div >
+              <input type="date" class="checkindateallprop" ng-model="selectedCheckout" ng-change="selecteddates(selectedCheckIn,selectedCheckout)">
+            </div>
+
+          </div>
+
+          <div class="col-33">
+            <div >
+              <select class="customselectguest" ng-model="selectedguests" ng-change="changeGuests(selectedguests)">
+                <option value="1">1 guest</option>
+                <option value="2">2 guest</option>
+                <option value="3">3 guest</option>
+                <option value="4">4 guest</option>
+                <option value="5">5 guest</option>
+                <option value="6">6 guest</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+
+      </div>
+      <hr>
+
+
+
+      <div class="class-12">
+        <div class="col">
+          <div class="allpropdates">
+            <span >Room type</span>
+          </div>
+
+        </div>
+        <div class="row">
+
+          <div class="col-33">
+            <div >
+
+              <label class="customcheckbox">
+                <div class="row">
+                  <div class="col-50">
+                    <img style="height:80% ;width:80%" src="img/homeicon24.png" class="homeicon">
+                  </div>
+                  <div class="col-50">
+                    <input type="checkbox" class="ccheckbox" ng-model="entirePlace" >
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col">
+                    <span class="hometext">Entire Home</span>
+                  </div>
+                </div>
+              </label>
+            </div>
+
+          </div>
+
+          <div class="col-33">
+            <div >
+              <label class="customcheckbox">
+                <div class="row">
+                  <div class="col-50">
+                    <img style="height:80% ;width:80%"  src="img/privateroom.png" class="homeicon">
+                  </div>
+                  <div class="col-50">
+                    <input type="checkbox" class="ccheckbox"  ng-model="privateRoom" >
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col">
+                    <span class="hometext">Private Room</span>
+                  </div>
+                </div>
+
+              </label>
+            </div>
+
+          </div>
+
+          <div class="col-33">
+            <div >
+              <label class="customcheckbox">
+                <div class="row">
+                  <div class="col-50">
+                    <img style="height:80% ;width:80%" src="img/sharedroom16.png" class="homeicon">
+                  </div>
+                  <div class="col-50">
+                    <input type="checkbox" class="ccheckbox" ng-model="sharedRoom" >
+                  </div>
+                </div>
+                <div class="row">
+                  <span class=" text-center hometext">Shared Room</span>
+                </div>
+
+              </label>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+
+      <!--LISTINGS DISPLAY
+          By Prateek
+      -->
+      <div class="nolistingstyle" ng-show="nolistings">
+        {{msg}}
+      </div>
+      <div class-="row" >
+
+        <div class="col-50 ">
+          <button class="btn btnFilterStyle">Filter</button>
+        </div>
+        <div class="col-50 ">
+          <span >{{noOfListings}} Rentals &#149; {{city}}</span>
+        </div>
+
+      </div>
+
+
+        <div class="col"  ng-repeat="property in properties | filter :  priceRangeFilter | filter : roomTypeFilter | filter : guestFilter | filter:dateFilter ">
+          <div class="row">
+            <div class="col " >
+              <div style="height: inherit">
+                <!--<div uib-carousel active="active" no-wrap="noWrapSlides" >-->
+                <!--<div uib-slide ng-repeat="slide in slides[$index] track by slide.id" index="slide.id">-->
+                <div class="col">
+                  <img class="corouselImageSize1" ng-src="{{property.listingImages[0][0]}}"
+                       style="margin: auto;">
+                </div>
+                <div class="pricestyle col" >
+                  <div>
+                    <span class="dollarSignStyle">&#36;</span><span>{{property.fixedPrice}}</span> <span> <img
+                    src="img/instantbook16.png"></span>
+                  </div>
+                </div>
+                <!--</div>-->
+                <!--</div>-->
+              </div>
+              <div style="cursor: pointer" ng-click="displayListing(property)">
+                <div class="col" style="padding-left: 0px">
+                  <div class="row">
+                    <div class="col-50">
+								<span class="listingHeading">
+									{{property.title}}
+								</span>
+                    </div>
+                    <div class="col-50">
+                      <!--<span class="listingStar" star-rating rating-value="ratingApt.current" max="ratingApt.max"></span>-->
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-50">
+								<span style="padding-top: 20px" class="listingDetail	">
+									<h6>{{property.roomType}} &#149; {{property.guestAllowed}} guests &#149;</h6>
+								</span>
+                    </div>
+                    <div class="col-50">
+                    <span class="" style="border-radius: 50%">
+								<img alt=""	ng-src="{{property.hostProfilePic}}" class="listingOwnerPic">
+							</span>
+                    </div>
+                  </div>
+
+
+                </div>
+
+                <div class="col-20" style="">
+
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+
+    </div>
+
+    <!--Map DISPLAY
+           By Kunal
+       -->
+    <div class="col mapclass">
+      <div class="col" >
+        <!-- <ng-map center="37.339425,-121.892532" zoom="14">-->
+        <ng-map class="col" center="{{mapLatitude}},{{mapLongitude}}" zoom="14">
+          <!--<div ng-repeat="p in properties">-->
+                    <!--<span>-->
+                   <!--&lt;!&ndash; <marker  label={{p.price}} position="{{p.latitude}}, {{p.longitude}}"></marker>&ndash;&gt;-->
+                        <!--<custom-marker id="{{p._id}}" position="{{p.latitude}}, {{p.longitude}}"-->
+                                       <!--on-click="showproperty(p)">-->
+
+                            <!--<div class="customtooltip">-->
+                                   <!--<span data-toggle="tooltip">${{p.fixedPrice}}</span>-->
+                                 <!--<span ><img src="images/instantbook16.png"></span>-->
+                            <!--</div>-->
+                        <!--</custom-marker>-->
+                    <!--</span>-->
+          <!--</div>-->
+
+        </ng-map>
+      </div>
+    </div>
+  </ion-content>
+</ion-view>
+

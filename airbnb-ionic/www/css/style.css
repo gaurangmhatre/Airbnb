@@ -1,0 +1,155 @@
+/* Empty. Add your own CSS if you like */
+.bg-color
+{
+	background: #00a699;
+	color:white;
+	font-family: Circular,"Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+
+a ,a:hover{
+	color:  white;;
+	text-decoration: none;
+	font-weight:bolder;
+}
+.center {
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+    text-align: center;
+}
+.header-font
+{
+	font-size:35px;
+}
+.button-login
+{
+	width:80%;
+	border-radius: 10px;
+	background-color: transparent;
+	border: 1px solid white;
+	color: white;
+	margin-top: 30px;
+	padding:5px;
+	font-size: 15px;
+	font-weight: bolder;
+}
+.fb-login
+{
+	background-color: white;
+	color:#00a699;
+}
+
+.space-up
+{
+  margin-top: 100px;
+}
+
+.list
+{
+  margin:30px;
+}
+.signup
+{
+  width:90%;
+  margin:auto ;
+  margin-top:100px;
+}
+
+.signup ion-item
+{
+  background-color: transparent;
+  color:white;
+  border:none;
+  border-bottom:1px solid white;
+
+}
+.signup ion-label
+{
+  color:white;
+}
+
+.signup input
+{
+  background-color: transparent;
+  color:white;
+  border-bottom:1px solid white;
+  width:100%;
+  margin-bottom:10px;
+  padding: 5px;
+}
+
+.bottom-right-nav
+{
+  position: absolute;
+  bottom:0;
+float:right;
+  padding-bottom: 30px;
+
+}
+.bottom-right-nav i
+{
+left:85%;
+  position:relative;
+  padding-bottom: 20px;
+  font-size: 30px;
+  border-radius: 50%;
+
+}
+
+.form-error
+{
+  color:white;
+}
+
+.img-filter
+{
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  /*background-color: rgba(0,0,0,0.2);*/
+  height: 100%;
+  color: white;
+}
+.paddingNone
+{
+  /*padding: 0;*/
+  height:380px;
+}
+.img-filter-text
+{
+  position: relative;
+  text-align: center;
+  top:-100px;
+
+}
+
+.img-filter-text h1
+{
+  top: 40%;
+  position: relative;
+  letter-spacing: 1px;
+}
+.img-filter-text h4
+{
+
+  color:white;
+  font-weight: 300;
+  letter-spacing: 2px;
+}
+.paddingGive{
+
+  height:240px;
+  top: 30%;
+}
+.img-padding
+{
+  padding: 5px;
+}
+.airbnb-color
+{
+  border-color: #ff5a5f;
+  color: white;
+  background-color: #ff5a5f;
+}

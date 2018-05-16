@@ -1,0 +1,41 @@
+<ion-view >
+
+  <ion-content>
+    <h1 style="color:black">Hello on home page</h1>
+
+    <div class="destinations-content  " >
+      <div class="destinations-header text-center">
+        <br>
+        <h4 class="airbnb-color">Featured Destinations</h4>
+      </div>
+      <br>
+      <div ng-repeat="city in cities " >
+
+        <div class="row" ng-if="$even">
+          <div class="col-50 img-padding"  >
+            <a href="" ng-click="searchAll(cities[$index])">
+            <img style="width:100%;height:100% ;filter: grayscale(40%)"  src="../img/paris.jpg" alt="">
+              <div class="img-filter-text"  >
+                <h4>{{cities[$index]}}</h4>
+              </div>
+            </a>
+          </div>
+
+          <div class="col-50 img-padding" >
+            <a href="" ng-click="searchAll(cities[$index+1])">  <img style="width:100%;height:100% ;filter: grayscale(40%)"  src="../img/paris.jpg" alt="">
+              <div class=" img-filter-text"  >
+                <h4>{{cities[$index+1]}}</h4>
+              </div>
+            </a>
+          </div>
+
+        </div>
+
+
+      </div>
+
+
+    </div>
+  </ion-content>
+
+</ion-view>
