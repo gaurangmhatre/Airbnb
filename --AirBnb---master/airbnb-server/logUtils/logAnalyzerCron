@@ -1,6 +1,0 @@
-#!/bin/bash
-# This would be a cron job to run logAnalyzer
-
-echo "Starting logAnalyzer..."
-
-node logAnalyzer.js
