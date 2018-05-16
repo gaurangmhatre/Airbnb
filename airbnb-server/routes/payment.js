@@ -10,22 +10,19 @@ function getCardDetails(msg, callback) {
     console.log("hostemail  in Handle Req:" + msg.userEmail);
 
 
-    UserProfile.findOne({"email":msg.userEmail},{"paymentMethod":1,"_id":0},function(err,result){
+    UserProfile.findOne({"email": msg.userEmail}, {"paymentMethod": 1, "_id": 0}, function (err, result) {
 
 
-        if(err)
-        {
+        if (err) {
             throw err;
         }
-       else if(result)
-        {
+        else if (result) {
             console.log("Fetched card details");
             res.statusCode = "200";
             res.cardDetails = result;
             console.log(res);
             callback(null, res);
         }
-
 
 
     });
@@ -40,57 +37,52 @@ function makePayment(msg, callback) {
 
     console.log("making payment");
     console.log("hostemail  in Handle Req:" + msg.userEmail);
-    console.log("cardNumber:"+msg.cardNumber);
-    console.log("tripId:"+msg.tripId);
+    console.log("cardNumber:" + msg.cardNumber);
+    console.log("tripId:" + msg.tripId);
 
     var billDate = new Date();
-    console.log("Bill Date:"+billDate);
+    console.log("Bill Date:" + billDate);
 
     var inputCard = "UPDATE trips SET ? where tripId = ?  ";
 
     var cardDetails = {
 
         "cardNumber": msg.cardNumber,
-        "paymentStatus":"paid",
-        "billDate":billDate
+        "paymentStatus": "paid",
+        "billDate": billDate
 
     };
 
-    mysql.putData(function(err,results){
+    mysql.putData(function (err, results) {
 
 
-        if(err){
-            console.log("Error in Trips MySQL:"+err);
+        if (err) {
+            console.log("Error in Trips MySQL:" + err);
 
             //throw err;
         }
 
-        else
-        {
-            if(results!== undefined){
+        else {
+            if (results !== undefined) {
 
                 console.log("Payment Done");
                 res.statusCode = "200";
                 callback(null, res);
 
             }
-            else
-
-            {
+            else {
 
                 console.log("Payment cannot be made");
-                res.statusCode="401";
+                res.statusCode = "401";
                 callback(null, res);
 
             }
         }
-    },inputCard,[cardDetails,msg.tripId])
-
+    }, inputCard, [cardDetails, msg.tripId])
 
 
 }
 
 
-
-exports.getCardDetails=getCardDetails;
-exports.makePayment=makePayment;
+exports.getCardDetails = getCardDetails;
+exports.makePayment = makePayment;

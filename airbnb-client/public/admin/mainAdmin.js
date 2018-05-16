@@ -4,11 +4,7 @@
 var dashboard =  angular.module('dashboard',['ui.router','ngMessages','ngMaterial','ngFileUpload']);
 
 dashboard.config(function($stateProvider,$urlRouterProvider,$locationProvider)
-
 {
-
-	//$urlRouterProvider.otherwise('/');
-
 	$stateProvider.state('landingPage',{
 		url:'/',
 		templateUrl:'adminGraphDashboard/adminGraphDashboard.html',
@@ -44,11 +40,4 @@ dashboard.config(function($stateProvider,$urlRouterProvider,$locationProvider)
 	templateUrl:'adminGraphDashboard/adminGraphDashboard.html',
 	controller : 'adminGraphDashboard'
 	});
-
-
-
-
-
-
-
 });

@@ -1,66 +1,33 @@
 var Listing = require('../models/listing');
 
-function getAllPlaces(msg, callback){
+function getAllPlaces(msg, callback) {
 
     var res = {};
 
-    console.log("User Email Id:"+msg.userEmail);
+    console.log("User Email Id:" + msg.userEmail);
     console.log("dst city  in Handle Req:" + msg.dstcity);
     var dstcity = msg.dstcity;
 
 
-   Listing.find({hostId: { $ne: msg.userEmail },"city": dstcity,"auctionPrice": null, "status":"approved"},function(err,list) {
+    Listing.find({
+        hostId: {$ne: msg.userEmail},
+        "city": dstcity,
+        "auctionPrice": null,
+        "status": "approved"
+    }, function (err, list) {
 
-        if(err)
-        {
+        if (err) {
             throw err;
         }
 
-        else if(list){
+        else if (list) {
             console.log("*********Fetched Properties for City**********");
             console.log(list);
             res.statusCode = "200";
             res.list = list;
             callback(null, res);
         }
-        else
-        {
-
-            console.log("Properties cannot be fetched");
-            res.statusCode = "401";
-            callback(null, res);
-
-        }
-
-   });
-
-}
-
-function getAllAuctionableProperties(msg, callback){
-
-    var res = {};
-
-
-    console.log("dst city  in Handle Req:" + msg.dstcity);
-    var dstcity = msg.dstcity;
-
-
-    Listing.find({hostId: { $ne: msg.userEmail }, "city": dstcity, "status":"approved","fixedPrice":null,auctionEndDate: {$gt : new Date()} },function(err,list) {
-
-        if(err)
-        {
-            throw err;
-        }
-
-        else if(list){
-            console.log("*********Fetched Properties for City**********");
-            console.log(list);
-            res.statusCode = "200";
-            res.list = list;
-            callback(null, res);
-        }
-        else
-        {
+        else {
 
             console.log("Properties cannot be fetched");
             res.statusCode = "401";
@@ -72,7 +39,47 @@ function getAllAuctionableProperties(msg, callback){
 
 }
 
-function allCities(msg, callback){
+function getAllAuctionableProperties(msg, callback) {
+
+    var res = {};
+
+
+    console.log("dst city  in Handle Req:" + msg.dstcity);
+    var dstcity = msg.dstcity;
+
+
+    Listing.find({
+        hostId: {$ne: msg.userEmail},
+        "city": dstcity,
+        "status": "approved",
+        "fixedPrice": null,
+        auctionEndDate: {$gt: new Date()}
+    }, function (err, list) {
+
+        if (err) {
+            throw err;
+        }
+
+        else if (list) {
+            console.log("*********Fetched Properties for City**********");
+            console.log(list);
+            res.statusCode = "200";
+            res.list = list;
+            callback(null, res);
+        }
+        else {
+
+            console.log("Properties cannot be fetched");
+            res.statusCode = "401";
+            callback(null, res);
+
+        }
+
+    });
+
+}
+
+function allCities(msg, callback) {
 
     var res = {};
 
@@ -81,33 +88,28 @@ function allCities(msg, callback){
     // var dstcity = msg.dstcity;
 
 
-    Listing.distinct("city",{"fixedPrice": null},function(err,auctionCity) {
+    Listing.distinct("city", {"fixedPrice": null}, function (err, auctionCity) {
 
-        if(err)
-        {
+        if (err) {
             throw err;
         }
 
-        else if(auctionCity){
+        else if (auctionCity) {
             console.log("*********Fetched  all the Cities data **********");
             console.log(auctionCity);
             res.statusCode = "200";
             res.auctionCity = auctionCity;
 
-            Listing.distinct("city",{"auctionPrice": null},function(err,fixedCity) {
+            Listing.distinct("city", {"auctionPrice": null}, function (err, fixedCity) {
 
 
-
-                if(err)
-                {
+                if (err) {
                     throw err;
                 }
-                else
-                {
-                    if(fixedCity)
-                    {
+                else {
+                    if (fixedCity) {
                         console.log(fixedCity);
-                        res.fixedCity=fixedCity;
+                        res.fixedCity = fixedCity;
                         callback(null, res);
 
                     }
@@ -119,8 +121,7 @@ function allCities(msg, callback){
 
 
         }
-        else
-        {
+        else {
 
             console.log("Properties cannot be fetched");
             res.statusCode = "401";
@@ -133,7 +134,6 @@ function allCities(msg, callback){
 }
 
 
-
-exports.allCities=allCities;
+exports.allCities = allCities;
 exports.getAllPlaces = getAllPlaces;
-exports.getAllAuctionableProperties=getAllAuctionableProperties;
+exports.getAllAuctionableProperties = getAllAuctionableProperties;

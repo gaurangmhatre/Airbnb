@@ -1,37 +1,36 @@
-
 var mongoose = require('mongoose');
-var bcrypt   = require('bcrypt-nodejs');
+var bcrypt = require('bcrypt-nodejs');
 
 var userSchema = mongoose.Schema({
 
-        local        : {
-        email        : String,
-        password     : String,
-        admin        : Boolean,
-        accountStatus : { type : Boolean, default:true}
+    local: {
+        email: String,
+        password: String,
+        admin: Boolean,
+        accountStatus: {type: Boolean, default: true}
     },
-    facebook         : {
-        id           : String,
-        token        : String,
-        email        : String,
-        name         : String
+    facebook: {
+        id: String,
+        token: String,
+        email: String,
+        name: String
     },
-    google           : {
-        id           : String,
-        token        : String,
-        email        : String,
-        name         : String
+    google: {
+        id: String,
+        token: String,
+        email: String,
+        name: String
     }
 
 });
 
 
-userSchema.methods.encrypt = function(password) {
+userSchema.methods.encrypt = function (password) {
     return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
 };
 
 // checking if password is valid
-userSchema.methods.validPassword = function(password) {
+userSchema.methods.validPassword = function (password) {
     return bcrypt.compareSync(password, this.local.password);
 };
 

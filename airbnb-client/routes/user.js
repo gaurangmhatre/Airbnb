@@ -12,17 +12,7 @@ function userHome(req, res)
         }
         else
         {
-            // req.logIn(result.email,function(err)
-            // {
-            //
-            //     if(err)
-            //     {
-            //         throw err;
-            //     }
-
-                //console.log("creating session");
                 return res.send(result);
-            //}) //close reglogIn after registering session
         }
 
     })
